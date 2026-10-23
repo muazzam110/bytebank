@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ───────────────────────────────────────────────────────────────
+   Bytebank design tokens  (light, bright, high-contrast)
+   Channels are "R G B" so Tailwind can add opacity (bg-primary/10).
+   ─────────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    --background: 246 247 251; /* soft cool canvas */
+    --foreground: 15 21 53; /* deep ink */
+    --card: 255 255 255;
+    --card-foreground: 15 21 53;
+    --popover: 255 255 255;
+    --popover-foreground: 15 21 53;
+    --primary: 91 61 245; /* brand indigo-violet */
+    --primary-foreground: 255 255 255;
+    --secondary: 241 238 255; /* brand-50 */
+    --secondary-foreground: 74 46 214; /* brand-700 */
+    --muted: 238 240 248;
+    --muted-foreground: 91 100 130;
+    --accent: 241 238 255;
+    --accent-foreground: 74 46 214;
+    --destructive: 190 18 60;
+    --destructive-foreground: 255 255 255;
+    --border: 227 230 242;
+    --input: 213 217 234;
+    --ring: 91 61 245;
+    --radius: 0.875rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+    /* two soft colour washes so the page never feels flat or sleepy */
+    background-image: radial-gradient(900px 420px at 92% -8%, rgb(139 92 246 / 0.12), transparent 60%),
+      radial-gradient(800px 380px at -8% 0%, rgb(16 185 129 / 0.08), transparent 55%);
+    background-repeat: no-repeat;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  ::selection {
+    background: rgb(91 61 245 / 0.2);
+  }
+
+  /* Respect the OS "reduce motion" setting everywhere (WCAG 2.2) */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/80 backdrop-blur-xl;
+  }
+  .glass-strong {
+    @apply border border-border bg-white/95 backdrop-blur-2xl;
+  }
+  .text-gradient {
+    background-image: linear-gradient(90deg, #5b3df5 0%, #c026d3 100%); /* both ends >= 4.7:1 on white */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .border-glow-danger {
+    @apply border border-danger/40 shadow-glow-danger;
+  }
+  .blur-private {
+    @apply select-none blur-md;
+  }
+  .bg-grid {
+    background-image: linear-gradient(rgb(91 61 245 / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(91 61 245 / 0.06) 1px, transparent 1px);
+    background-size: 44px 44px;
+  }
+  .skeleton {
+    @apply relative overflow-hidden rounded-md bg-muted;
+  }
+  .skeleton::after {
+    content: "";
+    @apply absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/70 to-transparent;
+  }
+}
+
+/* Fallback when the browser has no backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .glass,
+  .glass-strong {
+    background-color: #ffffff;
+  }
+}
+
+@media print {
+  @page {
+    margin: 16mm;
+  }
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .receipt-paper {
+    box-shadow: none !important;
+    border: 1px solid #d4d4d8;
+    break-inside: avoid;
+  }
+  [data-sonner-toaster] {
+    display: none !important;
+  }
+}
