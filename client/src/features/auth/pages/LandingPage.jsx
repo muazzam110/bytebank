@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowDownLeft,
@@ -89,6 +90,9 @@ const SECURITY = [
 ];
 
 export default function LandingPage() {
+    useEffect(() => {
+    fetch("/api/v1/health").catch(() => {}); // wakes the free backend while the visitor reads the page
+  }, []);
   return (
     <>
       {/* ───────── HERO ───────── */}

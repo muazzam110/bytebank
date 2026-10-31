@@ -15,6 +15,7 @@ import apiRouter from "./routes/index.js";
 export const app = express();
 
 app.disable("x-powered-by"); // don't advertise "Express" to scanners (helmet also strips it; belt and braces)
+app.disable("etag"); 
 
 // Behind Render/Railway/Fly the TCP peer is the platform's proxy. Trust ONE hop so `req.ip` is the real
 // client; otherwise every user shares one rate-limit bucket. Never enable this blindly in dev.
@@ -42,6 +43,12 @@ app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
 app.use(mongoSanitize());
 app.use(generalLimiter);
+
+// ← ADDED THIS WHOLE BLOCK, directly above the apiRouter line
+app.use("/api", (req, res, next) => {
+  res.set("Cache-Control", "no-store");    // private data must never be stored by a CDN
+  next();
+});
 
 app.use("/api/v1", apiRouter);
 
