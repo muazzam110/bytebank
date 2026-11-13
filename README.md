@@ -66,39 +66,33 @@ are enforced. The code only calls downward: `routes → controllers → services
 
 ```mermaid
 flowchart LR
-  user(["Customer or Admin"])
-
-  subgraph FE["Frontend: React app (port 5173)"]
-    ui["Pages and forms<br/>React Router + route guards"]
-    state["Redux Toolkit + RTK Query<br/>remembers server data"]
-  end
-
-  subgraph BE["Backend: Express API (port 5000)"]
-    pipe["Safety checks<br/>login, role, limits, validation"]
-    logic["Controllers and services<br/>auth, transfers, admin"]
-  end
-
-  subgraph DB["Database: MongoDB Atlas (replica set)"]
-    data[("7 collections<br/>users, accounts, transactions, ledger ...")]
-  end
-
-  mail["Email service (optional)<br/>password reset and payment notices"]
-
-  user -->|"uses in the browser"| ui
-  ui --> state
-  state -->|"HTTP + JSON<br/>session cookie"| pipe
-  pipe --> logic
-  logic -->|"MongoDB driver over TLS<br/>all-or-nothing transactions"| data
-  logic -.->|"SMTP"| mail
-
-  classDef fe fill:#EEF0FF,stroke:#5B3DF5,color:#1f1a5c
-  classDef be fill:#E6FAF5,stroke:#0F766E,color:#0b3d38
-  classDef db fill:#FFF1EC,stroke:#C2410C,color:#5a2208
-  classDef opt fill:#F4F4F5,stroke:#71717A,color:#3f3f46,stroke-dasharray: 4 3
-  class ui,state fe
-  class pipe,logic be
-  class data db
-  class mail opt
+user(["Customer or Admin"])
+subgraph FE["Frontend: React app (port 5173)"]
+ui["Pages and forms<br/>React Router + route guards"]
+state["Redux Toolkit + RTK Query<br/>remembers server data"]
+end
+subgraph BE["Backend: Express API (port 5000)"]
+pipe["Safety checks<br/>login, role, limits, validation"]
+logic["Controllers and services<br/>auth, transfers, admin"]
+end
+subgraph DB["Database: MongoDB Atlas (replica set)"]
+data[("7 collections<br/>users, accounts, transactions, ledger ...")]
+end
+mail["Email service (optional)<br/>password reset and payment notices"]
+user -->|"uses in the browser"| ui
+ui --> state
+state -->|"HTTP + JSON<br/>session cookie"| pipe
+pipe --> logic
+logic -->|"MongoDB driver over TLS<br/>all-or-nothing transactions"| data
+logic -.->|"SMTP"| mail
+classDef fe fill:#EEF0FF,stroke:#5B3DF5,color:#1f1a5c
+classDef be fill:#E6FAF5,stroke:#0F766E,color:#0b3d38
+classDef db fill:#FFF1EC,stroke:#C2410C,color:#5a2208
+classDef opt fill:#F4F4F5,stroke:#71717A,color:#3f3f46,stroke-dasharray: 4 3
+class ui,state fe
+class pipe,logic be
+class data db
+class mail opt
 ```
 
 <details>
