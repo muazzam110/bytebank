@@ -64,7 +64,6 @@ half-finished operations are normal in the real world, and none of them may crea
 A React app talks to an Express API, which is the only component that touches MongoDB and the only place where rules
 are enforced. The code only calls downward: `routes → controllers → services → models`.
 
-```mermaid
 flowchart LR
   user(["Customer or Admin"])
 
@@ -99,7 +98,6 @@ flowchart LR
   class pipe,logic be
   class data db
   class mail opt
-```
 
 <details>
 <summary><b>See how a payment works</b> (click to expand)</summary>
